@@ -19,7 +19,7 @@ class ApiResponse {
         return new ApiResponse(status, message, data, true);
     }
 
-    static error(message: string, data?: any | null, status: number = 500){
+    static fail(message: string, data?: any | null, status: number = 500){
         return new ApiResponse(status, message, data, false);
     }
 }
