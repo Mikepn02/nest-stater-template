@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: starter-template-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: nzabera2006
+      POSTGRES_DB: starter_template
+    ports:
+      - "5433:5432"  # host:container mapping for local access
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./prisma/db-init-scripts:/docker-entrypoint-initdb.d # optional SQL scripts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - starter-template
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    container_name: starter_template
+    environment:
+      NODE_ENV: docker
+      DATABASE_URL: postgres://postgres:nzabera2006@postgres:5432/starter_template
+      PORT: 8000
+      JWT_SECRET_KEY: "VrnAgPydvBS3AEQS7d0aKQ=="
+    ports:
+      - "8000:8000"
+    networks:
+      - starter-template
+  pgadmin:
+    container_name: ms_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - starter-template
+    restart: unless-stopped
+
+networks:
+  starter-template:
+    driver: bridge
+
+volumes:
+  pgdata:
+  pgadmin:
+
