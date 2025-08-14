@@ -6,6 +6,9 @@ import { hash, compare } from 'bcryptjs';
 import { LoginDto } from './dto/login-dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { randomBytes } from 'crypto';
+import config from 'src/config';
+import { emailUtil } from 'src/utils/email';
 
 @Injectable()
 export class AuthService {
@@ -70,5 +73,35 @@ export class AuthService {
       }catch (error) {
         return ApiResponse.fail('Internal server error', error.message || error);
       }
+  }
+
+
+  async forgotPassword(email: string){
+     try{
+      const  user = await this.userService.getUserByEmail(email);
+      if(!user) return ApiResponse.fail("User not found!", null , 404);
+
+      const resetToken = randomBytes(32).toString('hex');
+      const resetTokenExpiry = new Date(Date.now() + 3600 * 1000)
+
+      await this.prisma.user.update({
+        where:  { id: user.id},
+        data: { 
+          resetToken,
+          resetTokenExpiry
+        }
+        
+      })
+
+      const resetLink = `${config().app.url}/auth/reset-password?token=${resetToken}`
+      const emailSent = emailUtil.sendPasswordResetEmail(user.email,resetLink);
+
+      if (!emailSent) return ApiResponse.fail('Failed to send reset email', null, 500);
+      return ApiResponse.success('Password reset email sent. Check your inbox.', null);
+
+      
+     }catch(error){
+       return ApiResponse.fail("Internal server error", error.message || error)
+     }
   }
 }

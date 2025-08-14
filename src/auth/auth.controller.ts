@@ -1,11 +1,12 @@
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { UserService } from "src/user/user.service";
 import { LoginDto } from "./dto/login-dto";
 import type { Response, Request } from "express";
 import { RegisterDto } from "./dto/create-user.dto";
 import { AuthGuard } from "./auth.guard";
+import { ResetPasswordDto } from "./dto/forgot-password.dto";
 
 
 
@@ -39,5 +40,11 @@ export class AuthController {
         const userId = req.user.id;
         const response = await this.authService.getLoggedInUser(userId);
         return response;
+    }
+
+    @Post("forgot-password")
+    async initiateForgotPassword(@Body() dto: ResetPasswordDto, @Res() res: Response){
+        const response = await this.authService.forgotPassword(dto.email);
+        return res.status(response.status).json(response);
     }
 }
