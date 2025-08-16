@@ -17,13 +17,13 @@ jobs:
         uses: actions/setup-node@v4
       
       - name: Set up pnpm
-        uses: npm install -g pnpm
+        run: npm install -g pnpm
       
       - name: Install Dependencies
-        uses: pnpm install
+        run: pnpm install
       
       - name: Build App
-        uses: pnpm build
+        run: pnpm build
   
 
   docker:
