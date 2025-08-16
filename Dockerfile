@@ -39,7 +39,7 @@ RUN pnpm add wait-on
 EXPOSE 8000
 
 # Wait for Postgres, run migrations, then start app
-CMD ["sh", "-c", "npx wait-on tcp:postgres:5432 && npx prisma migrate deploy && node dist/src/main.js"]
+CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/src/main.js"]
 
 
 # =========================

@@ -20,6 +20,12 @@ model User {
   password         String
   resetToken       String?
   resetTokenExpiry DateTime?
+  role Role @default(USER)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
 }
