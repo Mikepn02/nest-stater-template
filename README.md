@@ -12,6 +12,8 @@ A starter template for building RESTful APIs with NestJS, Prisma ORM, and JWT Au
 - Input validation with `class-validator` and `ValidationPipe`
 - Swagger API documentation with bearer token support
 - Global PrismaService for database connection management
+- Github Workflows (CI/CD Pipeline)
+- Testing Coming soon!
 
 ---
 
@@ -43,7 +45,12 @@ pnpm install
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 JWT_SECRET="your_jwt_secret_key"
 JWT_EXPIRES_IN="1d"
-PORT=3000
+PORT=8000
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USER=johndoe@example.com
+MAIL_PASS=pass1234
+APP_URL=http://localhost:8000
 ```
 
 4. Generate Prisma Client
