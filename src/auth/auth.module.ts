@@ -7,14 +7,14 @@ import config from 'src/config';
 import { AuthGuard } from './auth.guard';
 
 @Module({
-    imports: [
-        JwtModule.register({
-            global: true,
-            secret: config().jwt.secret,
-            signOptions: { expiresIn: config().jwt.expiresIn },
-        })
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, UserService, AuthGuard]
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: config().jwt.secret,
+      signOptions: { expiresIn: config().jwt.expiresIn },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, UserService, AuthGuard],
 })
 export class AuthModule {}

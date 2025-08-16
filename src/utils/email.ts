@@ -38,7 +38,13 @@ export class emailUtil {
 
   static async sendPasswordResetEmail(to: string, resetLink: string) {
     try {
-      const templatePath = path.join(process.cwd(), 'src', 'utils', 'templates', 'reset-password.html');
+      const templatePath = path.join(
+        process.cwd(),
+        'src',
+        'utils',
+        'templates',
+        'reset-password.html',
+      );
       let template = fs.readFileSync(templatePath, 'utf-8');
 
       template = template.replace('{{RESET_LINK}}', resetLink);
