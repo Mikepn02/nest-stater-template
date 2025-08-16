@@ -7,10 +7,10 @@ services:
       POSTGRES_PASSWORD: nzabera2006
       POSTGRES_DB: starter_template
     ports:
-      - "5433:5432"  # host:container mapping for local access
+      - "5433:5432"  
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./prisma/db-init-scripts:/docker-entrypoint-initdb.d # optional SQL scripts
+      - ./prisma/db-init-scripts:/docker-entrypoint-initdb.d 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -20,11 +20,7 @@ services:
       - starter-template
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: production
-    # image: mikepn/backend-service:latest
+    image: mikepn/backend-service:latest
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,7 +29,6 @@ services:
       NODE_ENV: docker
       DATABASE_URL: postgres://postgres:nzabera2006@postgres:5432/starter_template
       PORT: 8000
-      JWT_SECRET_KEY: "VrnAgPydvBS3AEQS7d0aKQ=="
     ports:
       - "8000:8000"
     networks:
