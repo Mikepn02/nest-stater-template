@@ -24,6 +24,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
+    # image: mikepn/backend-service:latest
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,6 +38,8 @@ services:
       - "8000:8000"
     networks:
       - starter-template
+
+    
   pgadmin:
     container_name: ms_pgadmin
     image: dpage/pgadmin4
